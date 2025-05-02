@@ -36,6 +36,9 @@ export default {
       console.log(this.presetValues.customCode);
       this.$emit("loadCode", this.presetValues.customCode);
     },
+    displayJSON() {
+      console.log(JSON.stringify(this.presetValues));
+    },
   },
   components: {
     Launcher,
@@ -52,7 +55,7 @@ export default {
     :class="{ folded: !folded }"
   >
     <div class="content">
-      <div style="display: grid; grid-template-columns: 5fr 1fr">
+      <div style="display: grid; grid-template-columns: 5fr 1fr 1fr">
         <select class="preset-select">
           <option
             v-for="x in presetOptions"
@@ -65,14 +68,23 @@ export default {
           <div :style="{ 'background-color': presetValues.backgroundColor }"></div>
           <div></div>
         </button>
+        <button
+          class="json-button"
+          @click="displayJSON()"
+        >
+          JSON
+        </button>
       </div>
       <div>
         <div class="highlight-text">Confetti List:</div>
         <ConfettiList
           :confettis="presetValues.confettis"
           :colors="presetValues.launcher.colors"
+          :backgroundColor="presetValues.backgroundColor"
           @inspectedConfetti="inspectedConfetti"
+          @updateConfettiLauncher="this.$emit('updateConfettiLauncher')"
           ref="confettiList"
+          class="confetti-list"
         />
       </div>
       <div>
@@ -82,7 +94,7 @@ export default {
           :launcher="preset.launcher"
         />
       </div>
-      <div style="height: 100%">
+      <div style="height: calc(100% - 1em - 20px)">
         <div class="highlight-text">Custom Code:</div>
         <codemirror
           class="custom-code"
@@ -91,7 +103,7 @@ export default {
           :extensions="extensions"
           @blur="readCode()"
           @keydown.ctrl.s="readCode()"
-          :style="{ 'max-height': '92%', height: '100%' }"
+          :style="{ height: '100%' }"
           ref="textarea"
         />
       </div>
@@ -128,21 +140,23 @@ export default {
   background-color: #6e7272;
   height: 100%;
   padding: 1.2em;
+  max-width: 100%;
   display: grid;
-  grid-template-rows: fit-content(5%) fit-content(30%) fit-content(30%) auto;
+  grid-template-rows: auto auto auto 1fr;
+  grid-template-columns: 100%;
   box-sizing: border-box;
 }
 
 @media only screen and (min-width: 640px) {
   .sidebar {
     position: relative;
-    width: 30em;
+    width: 35em;
     left: 0;
     transition: 0.2s left ease-out;
   }
   .sidebar.folded {
     position: relative;
-    left: calc(-30em + 3em);
+    left: calc(-35em + 3em);
   }
   .content {
     width: calc(100% - 3em);
@@ -295,5 +309,11 @@ option:last-of-type {
   border-color: #14191a;
   border-width: 2px;
   border-style: solid;
+}
+
+.json-button {
+  background-color: #3a3f40;
+  margin-left: 10px;
+  border-radius: 4px;
 }
 </style>

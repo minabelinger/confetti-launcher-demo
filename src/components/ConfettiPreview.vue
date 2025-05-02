@@ -4,6 +4,7 @@
       id="canvas-confetti-preview"
       width="80"
       height="80"
+      ref="confettiPreview"
     ></canvas>
   </div>
 </template>
@@ -16,7 +17,8 @@ export default {
   name: "ConfettiPreview",
   data() {
     return {
-      size: 60,
+      size: 50,
+      skipRerender: false,
     };
   },
   props: {
@@ -27,7 +29,11 @@ export default {
     this.updatePreview();
   },
   updated() {
-    this.updatePreview();
+    if (this.skipRerender) {
+      this.skipRerender = false;
+    } else {
+      this.updatePreview();
+    }
   },
   methods: {
     updatePreview() {
@@ -57,14 +63,14 @@ export default {
 
       confettiValue.shapeOptions.width /= magnitude;
       confettiValue.shapeOptions.height /= magnitude;
-      confettiValue.shapeOptions.width *= this.size / 2;
-      confettiValue.shapeOptions.height *= this.size / 2;
+      confettiValue.shapeOptions.width *= this.size;
+      confettiValue.shapeOptions.height *= this.size;
 
       confettiValue.lifetime = {
         enabled: false,
       };
 
-      const canvas = document.getElementById("canvas-confetti-preview");
+      const canvas = this.$refs.confettiPreview;
       const ctx = canvas.getContext("2d");
       ctx.reset();
 

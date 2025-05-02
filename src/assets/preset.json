@@ -1,26 +1,75 @@
 {
   "colorfull": {
     "launcher": {
-      "position": { "x": 500, "y": 200 },
+      "position": {
+        "x": 858,
+        "y": 727
+      },
       "amount": [200, 300],
       "strength": [100, 400],
       "colors": ["#6beb34", "#4287f5", "#ca16de", "#41de16", "#de3116", "#f5d002"],
       "shootRepetition": {
-        "delay": 100,
-        "duration": 1000
+        "delay": 0,
+        "duration": 0
+      },
+      "direction": {
+        "start": 0,
+        "end": 2
       }
     },
     "confettis": [
       {
-        "shapeOptions": { "type": "ellipse", "width": 10, "height": 3, "shininess": 2, "shadows": 0.1 },
-        "velocity": { "x": 0, "y": 0, "maxFallspeed": 500, "gravity": 250, "airdrag": 60 },
+        "shapeOptions": {
+          "type": "ellipse",
+          "width": 20,
+          "height": 6,
+          "shininess": 2,
+          "shadows": 0.1
+        },
+        "velocity": {
+          "x": 0,
+          "y": 0,
+          "maxFallspeed": 500,
+          "gravity": 250,
+          "airdrag": 60
+        },
         "shading": true,
         "randomRotation": true,
         "randomColor": true,
-        "lifetime": { "enabled": true, "onset": 2, "duration": 5, "current": 0 }
+        "lifetime": {
+          "enabled": true,
+          "onset": 2,
+          "duration": 5,
+          "current": 0
+        }
+      },
+      {
+        "shapeOptions": {
+          "type": "rectangle",
+          "width": "30",
+          "height": "8",
+          "shininess": 2,
+          "shadows": 0.1
+        },
+        "velocity": {
+          "x": 0,
+          "y": 0,
+          "maxFallspeed": 500,
+          "gravity": "220",
+          "airdrag": 60
+        },
+        "shading": true,
+        "randomRotation": true,
+        "randomColor": true,
+        "lifetime": {
+          "enabled": true,
+          "onset": 2,
+          "duration": 5,
+          "current": 0
+        }
       }
     ],
     "backgroundColor": "#141921",
-    "customCode": "test"
+    "customCode": "const putInMiddle = (() => {\n  launcher.position.x = window.innerWidth / 2\n  launcher.position.y = window.innerHeight / 2\n})\n\nwindow.addEventListener(\"resize\", putInMiddle);\n\nputInMiddle()"
   }
 }

@@ -13,13 +13,13 @@ let conf_launcher = {};
 const preset = ref(presetList[selectedPreset]);
 let canvas = {};
 const displayInpsection = ref(false);
-const inspectIndex = ref(0);
+const inspectedConfetti = ref({});
+let inspectIndex;
 let customCode = {};
 
 const el = useTemplateRef("el");
 const handle = useTemplateRef("handle");
-const sidebar = ref("sidebar");
-const backgroundColor = ref("#ffffff");
+const sidebarRef = useTemplateRef("sidebar");
 
 const { x, y, style } = useDraggable(el, {
   initialValue: { x: 40, y: 40 },
@@ -60,26 +60,28 @@ function constructConfettiLauncher() {
   const launcher = preset.value.launcher;
 
   conf_launcher = new ConfettiLauncher(launcher, confettis, canvas);
+  handleCodeLoad(preset.value.customCode);
 }
 
 function shootConfetti() {
   conf_launcher.shoot();
 }
 
-function handleInspectConfetti(event) {
+function handleInspectConfetti(index) {
   displayInpsection.value = true;
-  inspectIndex.value = event;
+  inspectIndex = index;
+  inspectedConfetti.value = preset.value.confettis[index];
 }
 
 function rerenderConfetti() {
-  sidebar.value.rerenderConfetti(inspectIndex);
+  sidebarRef.value.rerenderConfetti(inspectIndex);
 }
 
 function handleCodeLoad(event) {
-  const code = `(function() { return (confettis, launcher, canvas, ConfettiLauncher) => {${event}}; })()`;
+  const code = `(function() { return (confettis, launcher, canvas, ConfettiLauncher, window) => {${event}}; })()`;
   try {
     customCode = eval(code);
-    customCode(preset.value.confettis, preset.value.launcher, canvas, ConfettiLauncher);
+    customCode(preset.value.confettis, preset.value.launcher, canvas, ConfettiLauncher, window);
   } catch (error) {
     customCode = {};
     console.error(error);
@@ -93,6 +95,7 @@ function handleCodeLoad(event) {
       @presetOptionChanged="handlePresetOptionChanged"
       @inspectedConfetti="handleInspectConfetti"
       @loadCode="handleCodeLoad"
+      @updateConfettiLauncher="constructConfettiLauncher"
       :preset="preset"
       ref="sidebar"
     />
@@ -120,7 +123,7 @@ function handleCodeLoad(event) {
         </button>
       </div>
       <ConfettiInspect
-        :confetti="preset.confettis[inspectIndex]"
+        :confetti="inspectedConfetti"
         @changedConfetti="rerenderConfetti()"
       />
     </div>
@@ -179,19 +182,19 @@ div {
 }
 
 .confetti-inspect {
-  width: 400px;
+  width: 300px;
   height: auto;
-  background-color: gray;
+  background-color: #3a3f40;
   z-index: 10;
-  border-radius: 1em 1em;
+  border-radius: 4px 4px;
 }
 
 .confetti-handle {
   width: 100%;
-  background-color: #595959;
+  background-color: #6e7272;
   display: flex;
   justify-content: center;
-  border-radius: 1em 1em 0 0;
+  border-radius: 4px 4px 0 0;
 }
 
 .inspect-close-button {

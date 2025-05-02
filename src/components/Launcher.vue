@@ -23,13 +23,13 @@
       <div class="inputs">
         <div>start</div>
         <input
-          :value="launcherValues.direction?.start ? Number(launcherValues.direction?.start / Math.PI).toFixed(1) : 0"
-          @input="changeValues(Number($event.target?.value) * Math.Pi, 'direction.start')"
+          :value="launcherValues.direction?.start ? launcherValues.direction?.start : 0"
+          @input="changeValues(Number($event.target?.value), 'direction.start')"
         />
         <div>end</div>
         <input
-          :value="launcherValues.direction?.end ? Number(launcherValues.direction?.end / Math.PI).toFixed(1) : 2"
-          @input="changeValues(Number($event.target?.value) * Math.Pi, 'direction.end')"
+          :value="launcherValues.direction?.end ? launcherValues.direction?.end : 2"
+          @input="changeValues(Number($event.target?.value), 'direction.end')"
         />
       </div>
     </div>
@@ -81,6 +81,12 @@
     <div class="option-wrapper">
       <div>Colors</div>
       <div class="color-button-wrapper">
+        <button
+          class="color-button"
+          @click="launcherValues.colors.unshift(currentColor)"
+        >
+          <img src="/src/assets/plus-icon-black.svg" />
+        </button>
         <div v-for="(color, i) in launcherValues.colors">
           <button
             @click="
@@ -94,12 +100,6 @@
             class="color-button"
           ></button>
         </div>
-        <button
-          class="color-button"
-          @click="launcherValues.colors.push(currentColor)"
-        >
-          <img src="/src/assets/plus-icon.svg" />
-        </button>
       </div>
     </div>
     <div
@@ -157,9 +157,6 @@ export default {
       valueCopy[p[i]] = value;
       console.log(this.launcherValues);
     },
-    changeSliderValues(value) {
-      this.launcherValues.direction = { start: Number(value[0] * Math.PI), end: Number(value[1]) * Math.PI };
-    },
     updateColor(event) {
       this.launcherValues.colors[this.colorIndex] = event;
     },
@@ -174,10 +171,6 @@ export default {
 .wrapper {
   display: grid;
   grid-template-rows: repeat(6, 1fr);
-}
-
-.preset-select {
-  width: 100%;
 }
 
 .inputs {
@@ -209,7 +202,8 @@ export default {
 
 .color-button-wrapper {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: row-reverse;
+  overflow-x: scroll;
 }
 
 img {

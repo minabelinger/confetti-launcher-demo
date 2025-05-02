@@ -3,6 +3,8 @@
     <button
       v-for="(confetti, i) in confettiItems"
       @click="inspectConfetti(i)"
+      :class="{ selected: i == selectedConfetti }"
+      :style="{ backgroundColor: backgroundColor }"
     >
       <ConfettiPreview
         :confetti="confetti"
@@ -10,8 +12,11 @@
         ref="preview"
       />
     </button>
-    <button @click="createNewConfetti()">
-      <img src="/src/assets/plus-icon.svg" />
+    <button
+      @click="createNewConfetti()"
+      style="background-color: #14191a"
+    >
+      <img src="/src/assets/plus-icon-white.svg" />
     </button>
   </div>
 </template>
@@ -25,11 +30,13 @@ export default {
   data() {
     return {
       confettiItems: _.cloneDeep(this.confettis),
+      selectedConfetti: undefined,
     };
   },
   props: {
     confettis: {},
     colors: {},
+    backgroundColor: "#ffffff",
   },
   components: {
     ConfettiPreview,
@@ -37,14 +44,23 @@ export default {
   methods: {
     inspectConfetti(index) {
       this.$emit("inspectedConfetti", index);
+      this.selectedConfetti = index;
     },
     createNewConfetti() {
-      console.log("created new confetti");
+      this.confettis.push(_.cloneDeep(this.confettis[0]));
+      this.confettiItems = _.cloneDeep(this.confettis);
+      this.$emit("updateConfettiLauncher");
+      for (const preview of this.$refs.preview) {
+        preview.skipRerender = true;
+      }
     },
-    rerenderConfetti(index) {
-      const clone = _.cloneDeep(this.confettis);
-      this.confettiItems = clone;
-      this.$refs.preview[index.value].updatePreview();
+    rerenderConfetti() {
+      for (const [i, preview] of Object.entries(this.$refs.preview)) {
+        if (i != this.selectedConfetti) {
+          preview.skipRerender = true;
+        }
+      }
+      this.confettiItems = _.cloneDeep(this.confettis);
     },
   },
 };
@@ -57,6 +73,7 @@ export default {
   display: flex;
   padding: 5px;
   border-radius: 0px 4px 4px 4px;
+  overflow-x: scroll;
 }
 
 button {
@@ -67,8 +84,12 @@ button {
   align-items: center;
   border-radius: 1em;
   margin-left: 3px;
-  border-color: #39565c;
+  border-color: #14191a;
   border-width: 5px;
+}
+
+button.selected {
+  border-color: white;
 }
 
 img {
