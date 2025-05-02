@@ -134,6 +134,10 @@ function handleCodeLoad(event) {
 </template>
 
 <style scoped>
+main {
+  height: 100vh;
+}
+
 div {
   font: -webkit-control;
 }
