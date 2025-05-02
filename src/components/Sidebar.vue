@@ -1,5 +1,4 @@
 <script>
-import "vue-slider-component/theme/antd.css";
 import Launcher from "./Launcher.vue";
 import ConfettiList from "./ConfettiList.vue";
 import { Codemirror } from "vue-codemirror";
