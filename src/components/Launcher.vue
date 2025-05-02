@@ -131,7 +131,6 @@
 </template>
 
 <script>
-import VueSlider from "vue-slider-component";
 import { ColorPicker } from "vue3-colorpicker";
 export default {
   props: {
@@ -167,9 +166,6 @@ export default {
     deleteColor() {
       this.launcherValues.colors.splice(this.colorIndex, 1);
     },
-  },
-  components: {
-    VueSlider,
   },
 };
 </script>
