@@ -212,9 +212,9 @@ export default {
   }
 }
 
-@media only screen and (max-width: 375px) {
+@media only screen and (max-width: 418px) {
   .sidebar.folded {
-    bottom: calc(-80%);
+    bottom: -80%;
   }
 }
 
