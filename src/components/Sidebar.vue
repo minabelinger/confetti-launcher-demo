@@ -106,7 +106,7 @@ export default {
           :launcher="preset.launcher"
         />
       </div>
-      <div style="height: calc(100% - 1em - 20px)">
+      <div style="height: calc(100% - 1em - 100px)">
         <div class="highlight-text">Custom Code:</div>
         <codemirror
           class="custom-code"
@@ -209,6 +209,12 @@ export default {
   }
   .slide-button {
     border-radius: 1em 1em 0 0;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .sidebar.folded {
+    bottom: calc(-80%);
   }
 }
 
