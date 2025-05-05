@@ -39,6 +39,16 @@ export default {
     displayJSON() {
       console.log(JSON.stringify(this.presetValues));
     },
+    changePresetOption(event) {
+      this.$emit("presetOptionChanged", event.target.value);
+    },
+  },
+  watch: {
+    preset: {
+      handler(newValue) {
+        this.presetValues = newValue;
+      },
+    },
   },
   components: {
     Launcher,
@@ -56,7 +66,10 @@ export default {
   >
     <div class="content">
       <div style="display: grid; grid-template-columns: 5fr 1fr 1fr">
-        <select class="preset-select">
+        <select
+          class="preset-select"
+          @change="changePresetOption"
+        >
           <option
             v-for="x in presetOptions"
             :value="x"
@@ -66,7 +79,6 @@ export default {
         </select>
         <button class="background-color">
           <div :style="{ 'background-color': presetValues.backgroundColor }"></div>
-          <div></div>
         </button>
         <button
           class="json-button"

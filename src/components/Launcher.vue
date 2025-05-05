@@ -155,13 +155,19 @@ export default {
       }
 
       valueCopy[p[i]] = value;
-      console.log(this.launcherValues);
     },
     updateColor(event) {
       this.launcherValues.colors[this.colorIndex] = event;
     },
     deleteColor() {
       this.launcherValues.colors.splice(this.colorIndex, 1);
+    },
+  },
+  watch: {
+    launcher: {
+      handler(newValue) {
+        this.launcherValues = newValue;
+      },
     },
   },
 };

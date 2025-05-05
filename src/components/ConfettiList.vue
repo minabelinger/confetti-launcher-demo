@@ -63,6 +63,14 @@ export default {
       this.confettiItems = _.cloneDeep(this.confettis);
     },
   },
+  watch: {
+    confettis: {
+      handler(newValue) {
+        this.confettiItems = _.cloneDeep(newValue);
+      },
+      deep: true,
+    },
+  },
 };
 </script>
 

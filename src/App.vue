@@ -1,6 +1,6 @@
 <script setup>
 import Sidebar from "./components/Sidebar.vue";
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUpdated, ref } from "vue";
 import { ConfettiLauncher } from "confetti-launcher";
 import presetList from "./assets/preset.json";
 import { useDraggable } from "@vueuse/core";
@@ -10,10 +10,10 @@ import _ from "lodash";
 
 let selectedPreset = "colorfull";
 let conf_launcher = {};
-const preset = ref(presetList[selectedPreset]);
+const preset = ref();
 let canvas = {};
 const displayInpsection = ref(false);
-const inspectedConfetti = ref({});
+const inspectedConfetti = ref();
 let inspectIndex;
 let customCode = {};
 
@@ -27,6 +27,8 @@ const { x, y, style } = useDraggable(el, {
   handle: handle,
 });
 
+preset.value = _.cloneDeep(presetList[selectedPreset]);
+
 document.addEventListener(
   "keydown",
   function (e) {
@@ -38,12 +40,17 @@ document.addEventListener(
 );
 
 onMounted(() => {
+  preset.value;
   window.addEventListener("resize", resizeCanvas);
   canvas = document.getElementById("confetti");
-  console.log(canvas);
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   constructConfettiLauncher();
+  handleCodeLoad(preset.value.customCode);
+});
+onUpdated(() => {
+  constructConfettiLauncher();
+  handleCodeLoad(preset.value.customCode);
 });
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -52,6 +59,7 @@ function resizeCanvas() {
 
 function handlePresetOptionChanged(event) {
   selectedPreset = event;
+  console.log(selectedPreset);
   preset.value = _.cloneDeep(presetList[selectedPreset]);
 }
 
@@ -60,7 +68,6 @@ function constructConfettiLauncher() {
   const launcher = preset.value.launcher;
 
   conf_launcher = new ConfettiLauncher(launcher, confettis, canvas);
-  handleCodeLoad(preset.value.customCode);
 }
 
 function shootConfetti() {
@@ -78,7 +85,8 @@ function rerenderConfetti() {
 }
 
 function handleCodeLoad(event) {
-  const code = `(function() { return (confettis, launcher, canvas, ConfettiLauncher, window) => {${event}}; })()`;
+  const cleanCode = event.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "");
+  const code = `(function() { return (confettis, launcher, canvas, ConfettiLauncher, window) => {${cleanCode}}; })()`;
   try {
     customCode = eval(code);
     customCode(preset.value.confettis, preset.value.launcher, canvas, ConfettiLauncher, window);
