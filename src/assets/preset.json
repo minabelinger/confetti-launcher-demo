@@ -80,7 +80,6 @@
       },
       "amount": [200, 300],
       "strength": [200, 400],
-      "colors": ["#6beb34", "#4287f5", "#ca16de", "#41de16", "#de3116", "#f5d002"],
       "shootRepetition": {
         "delay": 200,
         "duration": 1000
@@ -155,7 +154,6 @@
       },
       "amount": [1, 2],
       "strength": [1, 100],
-      "colors": ["#6beb34", "#4287f5", "#ca16de", "#41de16", "#de3116", "#f5d002"],
       "shootRepetition": {
         "delay": 0,
         "duration": 0
@@ -163,7 +161,8 @@
       "direction": {
         "start": 0,
         "end": 2
-      }
+      },
+      "colors": ["#6beb34"]
     },
     "confettis": [
       {

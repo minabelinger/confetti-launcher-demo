@@ -106,6 +106,7 @@ function handleCodeLoad(event) {
       @updateConfettiLauncher="constructConfettiLauncher"
       :preset="preset"
       ref="sidebar"
+      style="z-index: 2"
     />
     <canvas id="confetti"></canvas>
     <div
