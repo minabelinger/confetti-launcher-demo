@@ -161,7 +161,7 @@ div {
   height: 100%;
   touch-action: none;
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
 }
 
 #shoot-button {
